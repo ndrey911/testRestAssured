@@ -1,15 +1,16 @@
 package tests.testAPI.RESTfulBookerAPI;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
+import static tests.testAPI.RESTfulBookerAPI.BookerAPIUrls.*;
 
+@Listeners(IMyTestListeners.class)
 public class RESTfulBookerAPI {
 
     private String userName = "admin";
@@ -17,26 +18,24 @@ public class RESTfulBookerAPI {
     private String authToken;
 
     RequestSpecification requstSpec = given()
-            .baseUri("https://restful-booker1.herokuapp.com/")
+            .baseUri("https://restful-booker.herokuapp.com/")
             .contentType("application/json");
 
-    @BeforeMethod
-    public void enableLogging(){
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    }
-
-    @Test
+    @Test(description = "Creates a new auth token")
     public void Auth(){
         Response authResponse = given().spec(requstSpec)
                 .body("{\"username\" : \""+userName+"\",\"password\" : \""+pass+"\"}")
                 .when()
-                .post("auth")
+                .post(AUTH)
                 .then()
                 .extract().response();
         authResponse.then().statusCode(200);
         authResponse.then().body("token", notNullValue());
         authToken = authResponse.path("token").toString();
     }
+
+
+
 
 
 
