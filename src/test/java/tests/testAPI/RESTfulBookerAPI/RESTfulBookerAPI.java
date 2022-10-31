@@ -1,9 +1,9 @@
 package tests.testAPI.RESTfulBookerAPI;
 
-
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import org.json.JSONObject;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -29,8 +29,11 @@ public class RESTfulBookerAPI {
 
     @Test(description = "Creates a new auth token")
     public void Auth(){
+        JSONObject authBody = new JSONObject()
+                .put("username",userName+"12")
+                .put("password",pass);
         Response authResponse = given().spec(requestSpec)
-                .body("{\"username\" : \""+userName+"\",\"password\" : \""+pass+"\"}")
+                .body(authBody.toString())
                 .when()
                 .post(AUTH)
                 .then()
@@ -42,18 +45,19 @@ public class RESTfulBookerAPI {
 
     @Test(description = "Creates a new booking in the API")
     public void CreateBooking(){
+        JSONObject requrstBookingdates = new JSONObject()
+                .put("checkin","2018-01-01")
+                .put("checkout","2019-01-01");
+        JSONObject requestBody = new JSONObject()
+                .put("firstname","Jim")
+                .put("lastname","Brown")
+                .put("totalprice",111)
+                .put("depositpaid",true)
+                .put("bookingdates",requrstBookingdates)
+                .put("additionalneeds","Breakfast");
+
         Response createResponse = given().spec(requestSpec)
-                .body("{\n" +
-                        "    \"firstname\" : \"Jim\",\n" +
-                        "    \"lastname\" : \"Brown\",\n" +
-                        "    \"totalprice\" : 111,\n" +
-                        "    \"depositpaid\" : true,\n" +
-                        "    \"bookingdates\" : {\n" +
-                        "        \"checkin\" : \"2018-01-01\",\n" +
-                        "        \"checkout\" : \"2019-01-01\"\n" +
-                        "    },\n" +
-                        "    \"additionalneeds\" : \"Breakfast\"\n" +
-                        "}")
+                .body(requestBody.toString())
                 .when()
                 .post(BOOKING)
                 .then()
@@ -61,6 +65,7 @@ public class RESTfulBookerAPI {
         createResponse.then().spec(responseSpec)
                 .body("bookingid", notNullValue());
         bookingid = createResponse.path("bookingid").toString();
+
     }
 
 
