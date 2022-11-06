@@ -1,4 +1,4 @@
-package tests.testAPI.RESTfulBookerAPI;
+package testAPI;
 
 public final class BookerAPIUrls {
     private BookerAPIUrls(){}

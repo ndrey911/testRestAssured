@@ -1,0 +1,18 @@
+<suite name="My Tests" verbose="1">
+    <test name="Group of group Test">
+        <groups>
+            <define name="test">
+                <include name="all" />
+                <include name="RESTfulBookerAPI" />
+            </define>
+
+            <run>
+                <include name="all" />
+                <include name="RESTfulBookerAPI" />
+            </run>
+        </groups>
+        <classes>
+            <class name="testAPI.RESTfulBookerAPI" />
+        </classes>
+    </test>
+</suite>
