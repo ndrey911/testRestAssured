@@ -1,4 +1,4 @@
-package tests.testAPI.RESTfulBookerAPI;
+package testAPI;
 
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -9,9 +9,9 @@ import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
-import static tests.testAPI.RESTfulBookerAPI.BookerAPIUrls.*;
 
 @Listeners(IMyTestListeners.class)
+@Test(groups = "RESTfulBookerAPI")
 public class RESTfulBookerAPI {
 
     private String userName = "admin";
@@ -20,7 +20,7 @@ public class RESTfulBookerAPI {
     private String bookingid;
 
     RequestSpecification requestSpec = given()
-            .baseUri(BASE_URI)
+            .baseUri(BookerAPIUrls.BASE_URI)
             .contentType("application/json");
 
     ResponseSpecification responseSpec = given()
@@ -30,12 +30,12 @@ public class RESTfulBookerAPI {
     @Test(description = "Creates a new auth token")
     public void Auth(){
         JSONObject authBody = new JSONObject()
-                .put("username",userName+"12")
+                .put("username",userName)
                 .put("password",pass);
         Response authResponse = given().spec(requestSpec)
                 .body(authBody.toString())
                 .when()
-                .post(AUTH)
+                .post(BookerAPIUrls.AUTH)
                 .then()
                 .extract().response();
         authResponse.then().spec(responseSpec)
@@ -59,7 +59,7 @@ public class RESTfulBookerAPI {
         Response createResponse = given().spec(requestSpec)
                 .body(requestBody.toString())
                 .when()
-                .post(BOOKING)
+                .post(BookerAPIUrls.BOOKING)
                 .then()
                 .extract().response();
         createResponse.then().spec(responseSpec)

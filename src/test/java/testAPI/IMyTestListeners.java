@@ -1,4 +1,4 @@
-package tests.testAPI.RESTfulBookerAPI;
+package testAPI;
 
 import io.restassured.RestAssured;
 import org.testng.ITestContext;
